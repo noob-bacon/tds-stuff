@@ -3,7 +3,7 @@ getgenv().PreferMatchmaking = true
 getgenv().AutoRestart = true
 getgenv().AutoSkip = false
 getgenv().StratCreditsAuthor = "Seah&Botaccfor"
-local TDS = loadstring(game:HttpGet("https://raw.githubusercontent.com/Sigmanic/Strategies-X/main/TDS/MainSource.lua", true))()
+local TDS = loadstring(game:HttpGet("https://raw.githubusercontent.com/noob-bacon/tds-stuff/refs/heads/main/Modified%20script", true))()
 TDS:Map("Honey Valley", true, "Survival")
 TDS:Loadout({"Warden", "Commander", "Brawler", "Mercenary Base", "Farm"})
 TDS:Mode("Molten")
