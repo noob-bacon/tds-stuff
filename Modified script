@@ -657,7 +657,29 @@ if CheckPlace() then
    		end
 	end)
 
+	--Platform Stand
+	task.spawn(function()
+		--repeat task.wait() until Workspace.Map:FindFirstChild("Environment"):FindFirstChild("SpawnLocation")
+		local Part = Instance.new("Part")
+		Part.Size = Vector3.new(10, 2, 10)
+		Part.CFrame = CFrame.new(0, 30, 0) --Workspace.Map.Environment:FindFirstChild("SpawnLocation").CFrame + Vector3.new(0, 30, 0)
+		Part.Anchored = true
+		Part.CanCollide = true
+		Part.Transparency = 1
+		Part.Parent = Workspace
+		Part.Name = "PlatformPart"
+		StratXLibrary.PlatformPart = Part
 
+		local OutlineBox = Instance.new("SelectionBox")
+		OutlineBox.Parent = Part
+		OutlineBox.Adornee = Part
+		OutlineBox.LineThickness = 0.05
+
+		repeat task.wait() until LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") and LocalPlayer.Character:FindFirstChild("Humanoid")
+		LocalPlayer.Character.Humanoid.PlatformStand = true
+		LocalPlayer.Character.HumanoidRootPart.Anchored = true
+		LocalPlayer.Character.HumanoidRootPart.CFrame = Part.CFrame + Vector3.new(0, 3.5, 0)
+	end)
 
 	getgenv().OldPickups = LocalPlayer.PlayerGui:WaitForChild("ReactOverridesTopBar"):WaitForChild("Frame"):WaitForChild("items"):WaitForChild("Operation I.C.E"):WaitForChild("text").Text
 
@@ -1020,7 +1042,29 @@ if CheckPlace() then
 		end
 	end)
 
-	
+	if Items.Enabled then
+		task.spawn(function()
+			local Pickups = Workspace:WaitForChild("Pickups")
+			while true do
+				for Index, Object in next, Pickups:GetChildren() do
+					if getgenv().DefaultCam ~= 1 then
+						game:GetService("TweenService"):Create(LocalPlayer.Character:FindFirstChild("HumanoidRootPart"), TweenInfo.new(0, Enum.EasingStyle.Linear), {CFrame = StratXLibrary.PlatformPart.CFrame +  Vector3.new(0, 3.3, 0)}):Play()
+						task.wait(.1)
+					end
+					if Object:IsA("MeshPart") and table.find(Items.Name, Object.Name) and Object.CFrame.Y < 200 then
+						if not LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+							repeat task.wait() until LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+						end
+						repeat
+							game:GetService("TweenService"):Create(LocalPlayer.Character:FindFirstChild("HumanoidRootPart"), TweenInfo.new(.5, Enum.EasingStyle.Linear), {CFrame = Object.CFrame}):Play() 
+							task.wait(.5)
+						until Object.CFrame.Y >= 200 or not LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+					end
+				end
+				task.wait()
+			end
+		end)
+	end
 
 	local CamSetting = UtilitiesTab:DropSection("Camera Settings")
 	CamSetting:Button("Normal Camera",function()
